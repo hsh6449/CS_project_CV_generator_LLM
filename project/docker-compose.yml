@@ -1,0 +1,66 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: main
+      POSTGRES_USER: gunwoof
+      POSTGRES_PASSWORD: 00000000
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8080:8000"
+    depends_on:
+      - db
+      - llm
+    environment:
+      - DJANGO_SETTINGS_MODULE=backend.myproject.settings
+      - DB_NAME=main
+      - DB_USER=gunwoof
+      - DB_PASSWORD=00000000
+      - DB_HOST=db
+      - DB_PORT=5432
+    env_file:
+      - .env
+    working_dir: /app/backend
+    networks:
+      - backend
+
+  llm:
+    build:
+      context: .
+      dockerfile: model/Dockerfile
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json
+      - PROJECT_ID=${PROJECT_ID}
+      - LOCATION=asia-northeast3
+    volumes:
+      - ./model:/app
+      - ./credentials.json:/app/credentials.json:ro
+    ports:
+      - "5001:5000"
+    networks:
+      - backend
+    command: ["python", "llm_server.py"]
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  postgres_data:

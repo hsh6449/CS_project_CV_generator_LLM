@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Resume</title>
+    {% load static %}
+    {% load custom_tags %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"/>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+      :root {
+        --main-highlight-color: #60d0e4;
+        --secondary-highlight-color: #b8e6f1;
+        --list-point-color: #c2c6ca;
+        --text-color: #303e48;
+      }
+
+      @page {
+        size: A4;
+        margin: 5cm 1.2cm 1.2cm 8cm;
+
+        @top-left-corner {
+          content: '';
+          background-color: var(--main-highlight-color);
+        }
+
+        @top-left {
+          content: element(header);
+          margin-left: -8cm;
+          width: 210mm;
+          background-color: var(--main-highlight-color);
+        }
+
+        @top-right-corner {
+          content: '';
+          background-color: var(--main-highlight-color);
+        }
+
+        @left-top {
+          content: element(aside);
+          background-color: var(--secondary-highlight-color);
+        }
+
+        @bottom-left-corner {
+          content: '';
+          background-color: var (--secondary-highlight-color);
+        }
+      }
+
+      body {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 10pt;
+        color: var(--text-color);
+      }
+
+      h3,
+      h4 {
+        font-size: 10pt;
+        margin: 0;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      header {
+        position: running(header);
+        padding: 1cm 1.5cm;
+        display: flex;
+        justify-content: space-between;
+        align-items: top;
+      }
+
+      header div {
+        text-align: right;
+        line-height: 16pt;
+        text-transform: uppercase;
+      }
+
+      header div h2 {
+        font-size: 12pt;
+        margin: 0;
+        text-transform: none;
+      }
+
+      aside {
+        position: running(aside);
+        padding: 1.5cm;
+        text-align: left;
+      }
+
+      aside span.img {
+        width: 3cm;
+        height: 3cm;
+        background-image: url("https://images.unsplash.com/photo-1583195764036-6dc248ac07d9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2376&q=80");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        border: 1.5mm solid var(--text-color);
+        border-radius: 100%;
+        display: block;
+        margin: 0 auto;
+      }
+
+      aside hr {
+        margin: 2cm 0 0.5cm;
+        border: 0;
+        border-top: 0.5mm solid var (--text-color);
+        height: 0;
+      }
+
+      aside h3+h4 {
+        margin-top: 2.5mm;
+      }
+
+      aside h4 {
+        margin-top: 5mm;
+      }
+
+      aside p {
+        margin: 0;
+      }
+
+      main {
+        margin: 1.2cm 0 0 1.2cm;
+      }
+
+      main h3 {
+        margin-top: 1cm;
+        margin-bottom: 1em;
+      }
+
+      main ol {
+        list-style-type: none;
+        counter-reset: listitems;
+        margin-left: 1cm;
+      }
+
+      main ol > li {
+        counter-increment: listitems;
+      }
+
+      main ol > li:before {
+        content: '0'counter(listitems);
+        float: left;
+        margin-left: -1cm;
+        font-size: 18pt;
+        color: var(--list-point-color);
+      }
+
+      main ul {
+        margin-left: 0.5cm;
+      }
+
+      main h4+p {
+        margin: 0;
+      }
+
+      main .company {
+        text-transform: uppercase;
+      }
+
+      h3 {
+        color: var (--main-highlight-color);
+        text-transform: uppercase;
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      // CSRF 토큰을 자바스크립트에서 사용할 수 있도록 설정
+      $.ajaxSetup({
+        headers: {
+          'X-CSRFToken': '{{ csrf_token }}'
+        }
+      });
+    </script>
+  </head>
+
+  <body class="resume-page" data-user-id="{{ user_id }}">
+    <header>
+      <div>
+        <h2>{{ user.academic }}</h2>
+        <a href="mailto:{{ user.email }}">{{ user.email }}</a><br/>
+        <a href="#">{{ user.phone_number }}</a>
+      </div>
+    </header>
+    <div id="cv-container">
+      {% include_dynamic user resume_version %}
+    </div>
+    <!-- Sidebar Wrapper -->
+    <div id="sidebar-wrapper">
+      <a class="menu-toggle" href="#">
+        <i class="fa fa-bars"></i>
+      </a>
+    </div>
+    <a class="scroll-to-top rounded" href="#page-top" style="display: none">
+      <i class="fa fa-angle-up"></i>
+    </a>
+    <script src="{% static 'js/scripts.js' %}"></script>
+  </body>
+
+</html>

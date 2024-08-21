@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>이력서 관리 시스템</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <style>
+      body,
+      html {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      .container {
+        display: flex;
+        height: 100vh;
+        padding: 20px;
+      }
+
+      {
+        % comment %
+      }
+
+      ,
+      .actions {
+        % endcomment %
+      }
+
+      .sidebar {
+        width: 25%;
+        background-color: #343a40;
+        color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        /* 중앙 정렬 */
+      }
+
+      .sidebar h4 {
+        color: #000;
+        margin-bottom: 20px;
+      }
+
+      .sidebar .list-group-item {
+        background-color: #fff;
+        /* 흰색 배경 */
+        color: #28a745;
+        /* 초록색 글씨 */
+        border: 1px solid #28a745;
+        /* 초록색 테두리 */
+        border-radius: 5px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: background-color 0.2s, color 0.2s;
+        /* 배경색과 글자색 전환 효과 */
+      }
+
+      .sidebar .list-group-item:hover {
+        background-color: #28a745;
+        /* 초록색 배경 */
+        color: #fff;
+        /* 흰색 글씨 */
+      }
+
+      .main {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        overflow: auto;
+        margin: 0 20px;
+      }
+
+      .resume-display {
+        flex: 1;
+        overflow: auto;
+        margin-bottom: 20px;
+        background: #fff;
+        border: 1px solid #ccc;
+        padding: 20px;
+      }
+
+      .actions {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        margin-top: 20px;
+      }
+
+      .btn {
+        margin-bottom: 10px;
+        width: 100%;
+
+      }
+
+      .chat-box {
+        width: 300px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 20px;
+        background-color: #f9f9f9;
+        height: 830px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .chat-input-container {
+        display: flex;
+        width: 100%;
+        margin-top: 10px;
+      }
+
+      .chat-input {
+        flex: 1;
+        padding: 10px;
+        margin-right: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      .messages {
+        flex: 2;
+        overflow-y: auto;
+        margin-bottom: 10px;
+      }
+
+      .message {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 5px;
+      }
+
+      .user-message {
+        background-color: #e1ffc7;
+        text-align: right;
+        color: green;
+      }
+
+      .bot-message {
+        background-color: #f1f1f1;
+        text-align: left;
+        color: blue;
+      }
+
+      .error-message {
+        background-color: #ffc7c7;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        padding-top: 60px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+
+      .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+      }
+
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      .close:focus,
+      .close:hover {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .keywords-list {
+        margin-top: 20px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+        width: 100%;
+      }
+
+      .keyword {
+        display: block;
+        background-color: #d1ecf1;
+        color: #0c5460;
+        padding: 5px 10px;
+        margin: 5px;
+        border-radius: 5px;
+      }
+
+      .actions form {
+        width: 100%;
+      }
+    </style>
+  </head>
+
+  <body data-user-id="{{ user_id }}">
+    <div class="container">
+      <div class="sidebar bg-light p-3">
+        <h4>이력서 목록</h4>
+        <ul class="list-group" id="resume-list">
+          <li class="list-group-item" data-resume-version='0'>초기 이력서</li>
+          {% for version in resume_versions %}
+            <li class="list-group-item" data-resume-version='{{ version.version_number }}'>버전{{ version.version_number }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="main">
+        <div class="resume-display">
+          <h4>이력서 보기</h4>
+          <div id="resume-display-content"></div>
+        </div>
+      </div>
+      <div class="actions">
+        <div class="chat-box">
+          <h4>Chat Box</h4>
+          <div id="messages" class="messages">
+            <div id="placeholder-message">채팅 내용을 여기에 표시합니다.</div>
+          </div>
+          <div class="chat-input-container">
+            <input type="text" id="chat-input" class="chat-input" placeholder="메시지를 입력하세요..."/>
+            <button id="send-button" class="btn btn-primary">보내기</button>
+          </div>
+        </div>
+        <form method="POST" action="{% url 'resume_download_pdf' user.id %}">
+          {% csrf_token %}
+          <button id="download-button" class="btn btn-primary">다운로드</button>
+        </form>
+        <button id="analyze-button" class="btn btn-secondary">모집공고 분석</button>
+        <form method="POST" action="{% url 'resume_update' %}">
+          {% csrf_token %}
+          <input type="hidden" name="resume_id" value="{{ user.id }}"/>
+          <button type="submit" class="btn btn-secondary">수정하기</button>
+        </form>
+        <div class="keywords-list">
+          <h4>Keywords</h4>
+          <div id="keywords"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="analyze-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h4>모집공고 입력</h4>
+        <textarea id="job-description" rows="10" style="width: 100%"></textarea>
+        <button id="submit-job-description" class="btn btn-primary">분석</button>
+      </div>
+    </div>
+
+    {% load static %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+    <script src="{% static 'js/resume_download.js' %}"></script>
+
+  </body>
+
+</html>

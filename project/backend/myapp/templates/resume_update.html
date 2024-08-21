@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>이력서 관리 시스템</title>
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+			rel="stylesheet" />
+		<style>
+			body,
+			html {
+				height: 100%;
+				margin: 0;
+				padding: 0;
+				font-family: Arial, sans-serif;
+			}
+			.container {
+				display: flex;
+				height: 100vh;
+				padding: 20px;
+			}
+			.sidebar,
+			.chat {
+				width: 20%;
+				overflow: auto;
+			}
+			.main {
+				display: flex;
+				flex-direction: column;
+				flex: 1;
+				overflow: hidden;
+				margin-left: 20px;
+			}
+			.resume-display,
+			.resume-edit {
+				flex: 1;
+				overflow: auto;
+				margin-bottom: 20px;
+			}
+			#chat-area {
+				height: calc(100vh - 180px);
+				overflow-y: auto;
+				background-color: #f8f9fa;
+				padding: 10px;
+				border: 1px solid #dee2e6;
+			}
+			#resume-list {
+				height: calc(100vh - 140px);
+				overflow-y: auto;
+			}
+			textarea {
+				height: calc(100% - 40px);
+				resize: none;
+			}
+			.btn,
+			.form-control {
+				margin-top: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="sidebar bg-light p-3">
+				<h4>이력서 목록</h4>
+				<ul class="list-group" id="resume-list">
+					<li class="list-group-item" onclick="selectResume('resume1')">
+						이력서 1
+					</li>
+					<li class="list-group-item" onclick="selectResume('resume2')">
+						이력서 2
+					</li>
+					<li class="list-group-item" onclick="selectResume('resume3')">
+						이력서 3
+					</li>
+				</ul>
+				<button class="btn btn-secondary mt-3" onclick="goBack()">
+					뒤로 가기
+				</button>
+			</div>
+			<div class="main">
+				<div class="resume-display bg-white border p-3">
+					<h4>이력서 보기</h4>
+					<div id="resume-display-content" style="height: 200px"></div>
+				</div>
+				<div class="resume-edit bg-white border p-3">
+					<h4>이력서 수정</h4>
+					<textarea id="resume-edit-area" class="form-control"></textarea>
+					<button class="btn btn-primary" onclick="updateResume()">저장</button>
+				</div>
+			</div>
+			<div class="chat bg-light p-3">
+				<h4>챗봇</h4>
+				<div id="chat-area"></div>
+				<input
+					type="text"
+					id="chat-input"
+					class="form-control"
+					placeholder="메시지를 입력하세요..." />
+				<button class="btn btn-primary" onclick="sendMessage()">보내기</button>
+			</div>
+		</div>
+		<script>
+			
+			// 메뉴에 있는 이력서 버튼과 이력서를 연결하는 함수
+			function selectResume(resumeId) {
+				if (resumeId === "resume1") {
+					// 서버에서 이력서 1의 데이터를 동적으로 불러오는 부분
+					fetch(`/resume1/`)
+						.then((response) => response.text())
+						.then((html) => {
+							document.getElementById("resume-display-content").innerHTML =
+								html;
+						})
+						.catch((error) =>
+							console.error("Error loading the resume:", error)
+						);
+				} else {
+					// 이력서 2와 3에는 데이터가 없으므로 아무것도 표시하지 않음
+					document.getElementById("resume-display-content").innerHTML = "";
+				}
+			}
+			selectResume("resume1");
+
+			function updateResume() {
+				const content = document.getElementById("resume-edit-area").value;
+				document.getElementById("resume-display-content").innerText = content;
+				alert("이력서가 업데이트되었습니다.");
+			}
+
+			// html안에 이력서 html을 가져오는 코드
+			function sendMessage() {
+				const input = document.getElementById("chat-input");
+				const chatArea = document.getElementById("chat-area");
+				const message = document.createElement("p");
+				message.textContent = input.value;
+				chatArea.appendChild(message);
+				input.value = "";
+			}
+			
+			document.addEventListener("DOMContentLoaded", function () {
+				fetch("/resume1/")
+					.then((response) => response.text())
+					.then((html) => {
+						document.getElementById("resume-display-content").innerHTML = html;
+					})
+					.catch((error) => console.error("Error loading the resume:", error));
+			});
+
+			function downloadHTML() {
+				// HTML 문서의 일부 또는 전체를 문자열로 가져옵니다.
+				var htmlContent = document.documentElement.outerHTML;
+				// Blob 객체 생성
+				var blob = new Blob([htmlContent], { type: "text/html" });
+				// Blob 객체를 이용해 다운로드 링크 생성
+				var url = URL.createObjectURL(blob);
+				// 링크를 동적으로 생성하여 클릭 이벤트를 발생시킵니다.
+				var a = document.createElement("a");
+				a.href = url;
+				a.download = "이력서.html"; // 다운로드 파일명 지정
+				document.body.appendChild(a); // 링크를 DOM에 추가
+				a.click(); // 링크 클릭
+				document.body.removeChild(a); // 사용 후 링크 삭제
+			}
+
+			function goBack() {
+				window.history.back();
+			}
+		</script>
+	</body>
+</html>

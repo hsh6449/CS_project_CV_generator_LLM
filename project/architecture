@@ -1,0 +1,40 @@
+project
+│
+├── model
+│   ├── llm_server.py
+│   ├── Dockerfile # Dockerfile for the llm
+│   └── requirements.txt # Python requirements for the llm
+│   └── start.sh
+│
+├── backend
+│   ├── myapp
+│   │   ├── templates
+│   │   │   └── custom_tags.py
+│   │   ├── templates
+│   │   │   ├── user_id # user_id에 따라 생성되는 폴더
+│   │   │   ├── home.html
+│   │   │   ├── resume1.html # resume 미리보기 페이지에 사용되는 inner template
+│   │   │   ├── resume_update.html 
+│   │   │   ├── resume_download.html # resume 미리보기 페이지
+│   │   │   ├── resume_content.html  # resume의 메인 내용이 나오는 페이지 
+│   │   │   └── user_form.html
+│   │   ├── static
+│   │   │   ├── css
+│   │   │   │   └── styles.css
+│   │   │   └── js
+│   │   │       ├── resume_download.js
+│   │   │       └── scripts.js
+│   │   ├── views.py
+│   │   ├── urls.py
+│   │   └── ...
+│   ├── myproject
+│   │   ├── settings.py
+│   │   ├── urls.py
+│   │   └── ...
+│   └── manage.py
+│
+├── .env
+├── requirements.txt
+├── credentials.json
+├── docker-compose.yml
+└── Dockerfile

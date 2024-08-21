@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>사용자 정보 입력 폼</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+
+      .container {
+        margin-top: 50px;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .form-group label {
+        font-weight: bold;
+      }
+
+      button {
+        background-color: #007bff;
+        color: white;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      .form-section {
+        display: none;
+      }
+
+      .form-section.active {
+        display: block;
+      }
+
+      .form-navigation {
+        display: flex;
+        justify-content: space-between;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>사용자 정보 입력 폼</h1>
+      <form id="userForm" action="{% url 'user_form' %}" method="post">
+        {% csrf_token %}
+        <!-- Section 1 -->
+        <div class="form-section active" id="section-personal-info">
+          <button type="button" class="btn btn-primary btn-add-more" data-section="personal-info">
+            +
+          </button>
+          <h2>개인 정보</h2>
+          <div class="form-group">
+            <label for="name">이름 (English or Korean)</label>
+            <input type="text" class="form-control" id="name" name="name" maxlength="30"/>
+          </div>
+          <div class="form-group">
+            <label for="date_of_birth">생년월일</label>
+            <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"/>
+          </div>
+          <div class="form-group">
+            <label for="email">이메일 (EX. aaa@gmail.com)</label>
+            <input type="email" class="form-control" id="email" name="email"/>
+          </div>
+          <div class="form-group">
+            <label for="phone_number">전화번호 (EX. 010-0000-0000)</label>
+            <input type="text" class="form-control" id="phone_number" name="phone_number" pattern="01[016789]-\d{3,4}-\d{4}"/>
+          </div>
+          <div class="form-group">
+            <label for="academic">학력 (EX. 한국대학교 컴퓨터공학 학사, 영문도 가능)</label>
+            <input type="text" class="form-control" id="academic" name="academic" maxlength="30"/>
+          </div>
+        </div>
+        <!-- Section 2 -->
+        <div class="form-section" id="section-company-info">
+          <button type="button" class="btn btn-primary btn-add-more" data-section="company-info">
+            +
+          </button>
+          <h2>회사 정보</h2>
+          <div class="form-group">
+            <label for="company_name">회사 이름</label>
+            <input type="text" class="form-control" id="company_name" name="company_name[]" maxlength="255"/>
+          </div>
+          <div class="form-group">
+            <label for="start_date">시작 날짜</label>
+            <input type="date" class="form-control" id="start_date" name="start_date[]"/>
+          </div>
+          <div class="form-group">
+            <label for="end_date">종료 날짜</label>
+            <input type="date" class="form-control" id="end_date" name="end_date[]"/>
+          </div>
+          <div class="form-group">
+            <label for="role">역할</label>
+            <input type="text" class="form-control" id="role" name="role[]" maxlength="255"/>
+          </div>
+          <div class="form-group">
+            <label for="experience">경험</label>
+            <input type="text" class="form-control" id="experience" name="experience[]" maxlength="255"/>
+          </div>
+        </div>
+        <!-- Section 3 -->
+        <div class="form-section" id="section-internship-info">
+          <button type="button" class="btn btn-primary btn-add-more" data-section="internship-info">
+            +
+          </button>
+          <h2>인턴십 정보</h2>
+          <div class="form-group">
+            <label for="intern_company_name">회사 명</label>
+            <input type="text" class="form-control" id="intern_company_name" name="intern_company_name[]" maxlength="255"/>
+          </div>
+          <div class="form-group">
+            <label for="start_date">시작 날짜</label>
+            <input type="date" class="form-control" id="start_date" name="start_date[]"/>
+          </div>
+          <div class="form-group">
+            <label for="end_date">종료 날짜</label>
+            <input type="date" class="form-control" id="end_date" name="end_date[]"/>
+          </div>
+          <div class="form-group">
+            <label for="intern_experience">경험</label>
+            <input type="text" class="form-control" id="intern_experience" name="intern_experience[]" maxlength="255"/>
+          </div>
+        </div>
+        <!-- Section 4 -->
+        <div class="form-section" id="section-project-info">
+          <button type="button" class="btn btn-primary btn-add-more" data-section="project-info">
+            +
+          </button>
+          <h2>프로젝트 정보</h2>
+          <div class="form-group">
+            <label for="project_name">프로젝트 이름</label>
+            <input type="text" class="form-control" id="project_name" name="project_name[]" maxlength="255"/>
+          </div>
+          <div class="form-group">
+            <label for="start_date">시작 날짜</label>
+            <input type="date" class="form-control" id="start_date" name="start_date[]"/>
+          </div>
+          <div class="form-group">
+            <label for="end_date">종료 날짜</label>
+            <input type="date" class="form-control" id="end_date" name="end_date[]"/>
+          </div>
+          <div class="form-group">
+            <label for="project_description">설명</label>
+            <textarea class="form-control" id="project_description" name="project_description[]"></textarea>
+          </div>
+        </div>
+        <!-- Section 5 -->
+        <div class="form-section" id="section-paper-info">
+          <button type="button" class="btn btn-primary btn-add-more" data-section="paper-info">
+            +
+          </button>
+          <h2>논문 정보</h2>
+          <div class="form-group">
+            <label for="paper_title">논문 제목</label>
+            <input type="text" class="form-control" id="paper_title" name="paper_title[]" maxlength="255"/>
+          </div>
+          <div class="form-group">
+            <label for="publication_date">발행 날짜</label>
+            <input type="date" class="form-control" id="publication_date" name="publication_date[]"/>
+          </div>
+          <div class="form-group">
+            <label for="journal">저널</label>
+            <input type="text" class="form-control" id="journal" name="journal[]" maxlength="255"/>
+          </div>
+          <div class="form-group">
+            <label for="abstract">초록</label>
+            <textarea class="form-control" id="abstract" name="abstract[]"></textarea>
+          </div>
+        </div>
+        <!-- Section 6 -->
+        <div class="form-section" id="section-activity-info">
+          <button type="button" class="btn btn-primary btn-add-more" data-section="activity-info">
+            +
+          </button>
+          <h2>외부 활동 정보</h2>
+          <div class="form-group">
+            <label for="activity_name">활동 이름</label>
+            <input type="text" class="form-control" id="activity_name" name="activity_name[]" maxlength="255"/>
+          </div>
+          <div class="form-group">
+            <label for="activity_start_date">시작 날짜</label>
+            <input type="date" class="form-control" id="activity_start_date" name="activity_start_date[]"/>
+          </div>
+          <div class="form-group">
+            <label for="activity_end_date">종료 날짜</label>
+            <input type="date" class="form-control" id="activity_end_date" name="activity_end_date[]"/>
+          </div>
+          <div class="form-group">
+            <label for="activity_description">설명</label>
+            <textarea class="form-control" id="activity_description" name="activity_description[]"></textarea>
+          </div>
+        </div>
+        <!-- Navigation Buttons -->
+        <div class="form-navigation">
+          <button type="button" class="previous btn btn-secondary">이전</button>
+          <button type="button" class="next btn btn-primary">다음</button>
+          <button type="submit" class="submit btn btn-success" style="display: none">
+            제출하기
+          </button>
+        </div>
+      </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script>
+      $(function () {
+        var $sections = $(".form-section");
+        var $previous = $(".previous");
+        var $next = $(".next");
+        var $submit = $(".submit");
+
+        function navigateTo(index) {
+          $sections
+            .removeClass("active")
+            .eq(index)
+            .addClass("active");
+          $previous.toggle(index > 0);
+          $next.toggle(index < $sections.length - 1);
+          $submit.toggle(index === $sections.length - 1);
+        }
+
+        function currentIndex() {
+          return $sections.index($sections.filter(".active"));
+        }
+
+        $previous.click(function () {
+          navigateTo(currentIndex() - 1);
+        });
+
+        $next.click(function () {
+          navigateTo(currentIndex() + 1);
+        });
+
+        navigateTo(0); // Initialize to the first section
+
+        $(".btn-add-more").click(function () {
+          var section = $(this).data("section");
+          var newFields = "";
+
+          switch (section) {
+            case "personal-info":
+              newFields = `
+                        <div class="form-group">
+                            <label for="name">이름</label>
+                            <input type="text" class="form-control" id="name" name="name" maxlength="30" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="date_of_birth">생년월일</label>
+                            <input type="date" class="form-control" id="date_of_birth" name="date_of_birth">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">이메일</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone_number">전화번호</label>
+                            <input type="text" class="form-control" id="phone_number" name="phone_number" pattern="01[016789]-\d{3,4}-\d{4}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="academic">학력</label>
+                            <input type="text" class="form-control" id="academic" name="academic" maxlength="30">
+                        </div>`;
+              $("#section-personal-info").append(newFields);
+              break;
+            case "company-info":
+              newFields = `
+                        <div class="form-group">
+                            <label for="company_name">회사 이름</label>
+                            <input type="text" class="form-control" id="company_name" name="company_name[]" maxlength="255" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="start_date">시작 날짜</label>
+                            <input type="date" class="form-control" id="start_date" name="start_date[]" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="end_date">종료 날짜</label>
+                            <input type="date" class="form-control" id="end_date" name="end_date[]">
+                        </div>
+						<div class="form-group">
+                            <label for="role">역할</label>
+                            <input type="text" class="form-control" id="role" name="role[]" maxlength="255">
+                        </div>
+                        <div class="form-group">
+                            <label for="experience">경험</label>
+                            <input type="text" class="form-control" id="experience" name="experience[]" maxlength="255">
+                        </div>`;
+              $("#section-company-info").append(newFields);
+              break;
+            case "internship-info":
+              newFields = `
+                        <div class="form-group">
+                            <label for="intern_company_name">인턴십 이름</label>
+                            <input type="text" class="form-control" id="intern_company_name" name="intern_company_name[]" maxlength="255" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="start_date">시작 날짜</label>
+                            <input type="date" class="form-control" id="start_date" name="start_date[]" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="end_date">종료 날짜</label>
+                            <input type="date" class="form-control" id="end_date" name="end_date[]">
+                        </div>
+                        <div class="form-group">
+                            <label for="intern_experience">경험</label>
+                            <input type="text" class="form-control" id="intern_experience" name="intern_experience[]" maxlength="255">
+                        </div>`;
+              $("#section-internship-info").append(newFields);
+              break;
+            case "project-info":
+              newFields = `
+                        <div class="form-group">
+                            <label for="project_name">프로젝트 이름</label>
+                            <input type="text" class="form-control" id="project_name" name="project_name[]" maxlength="255" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="start_date">시작 날짜</label>
+                            <input type="date" class="form-control" id="start_date" name="start_date[]" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="end_date">종료 날짜</label>
+                            <input type="date" class="form-control" id="end_date" name="end_date[]">
+                        </div>
+						<div class="form-group">
+                            <label for="project_description">설명</label>
+                            <textarea class="form-control" id="project_description" name="project_description[]"></textarea>
+                        </div>`;
+              $("#section-project-info").append(newFields);
+              break;
+            case "paper-info":
+              newFields = `
+                        <div class="form-group">
+                            <label for="paper_title">논문 제목</label>
+                            <input type="text" class="form-control" id="paper_title" name="paper_title[]" maxlength="255" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="publication_date">발행 날짜</label>
+                            <input type="date" class="form-control" id="publication_date" name="publication_date[]" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="journal">저널</label>
+                            <input type="text" class="form-control" id="journal" name="journal[]" maxlength="255">
+                        </div>
+                        <div class="form-group">
+                            <label for="abstract">초록</label>
+                            <textarea class="form-control" id="abstract" name="abstract[]"></textarea>
+                        </div>`;
+              $("#section-paper-info").append(newFields);
+              break;
+            case "activity-info":
+              newFields = `
+                        <div class="form-group">
+                            <label for="activity_name">활동 이름</label>
+                            <input type="text" class="form-control" id="activity_name" name="activity_name[]" maxlength="255" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="activity_start_date">시작 날짜</label>
+                            <input type="date" class="form-control" id="activity_start_date" name="activity_start_date[]" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="activity_end_date">종료 날짜</label>
+                            <input type="date" class="form-control" id="activity_end_date" name="activity_end_date[]">
+                        </div>
+						<div class="form-group">
+                            <label for="activity_description">설명</label>
+                            <textarea class="form-control" id="activity_description" name="activity_description[]"></textarea>
+                        </div>`;
+              $("#section-activity-info").append(newFields);
+              break;
+          }
+        });
+      });
+    </script>
+  </body>
+
+</html>

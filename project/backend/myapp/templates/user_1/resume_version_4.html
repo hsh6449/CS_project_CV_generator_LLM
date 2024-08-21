@@ -1,0 +1,77 @@
+<aside>
+    <span class="img"></span>
+    <hr />
+    <h3>Education</h3>
+    <h4>{{ user.academic }}</h4>
+    <p>{{ user.date_of_birth }}</p>
+    <hr />
+    <h3>Skills</h3>
+    <a href="#">{{ user.name }}<span>.com</span></a>
+</aside>
+
+<main>
+    <h3>Summary</h3>
+    <h4>{{ user.academic }}</h4>
+    <p>저는 **AGI 로봇 개발** 경험이 있는 AI 분야 대학원 재학생입니다. **스마트폰 웹 개발 서비스** 개발 경험을 바탕으로 **CV Generator** 프로젝트를 진행하며 빠르고 정확한 CV 생성 능력을 갖췄습니다. 또한, **트랜스포머 버퍼** 연구를 통해 장기기억 능력을 향상시키는 프레임워크 개발 경험도 있습니다.</p>
+    <h3>Professional Experience</h3>
+    <ol>
+        {% for company in companies %}
+        <li>
+            <h4>{{ company.role }}</h4>
+            <p>
+                <span class="company">{{ company.company_name }}</span> . {{ company.period }}
+            </p>
+            <p>{{ company.experience }}</p>
+        </li>
+        {% endfor %}
+    </ol>
+
+    <h3>Internship Experience</h3>
+    <ol>
+        {% for intern in interns %}
+        <li>
+            <h4>{{ intern.intern_company_name }}</h4>
+            <p><span class="company">{{ intern.period }}</span></p>
+            <p>{{ intern.experience }}</p>
+        </li>
+        {% endfor %}
+    </ol>
+
+    <h3>Project Experience</h3>
+    <ol>
+        {% for project in projects %}
+        <li>
+            <h4>{{ project.project_name }}</h4>
+            <p>{{ project.description }}</p>
+            <p>
+                <span class="company">{{ project.start_date }} - {{ project.end_date }}</span>
+            </p>
+        </li>
+        {% endfor %}
+    </ol>
+
+    <h3>Publications</h3>
+    <ol>
+        {% for paper in papers %}
+        <li>
+            <h4>{{ paper.paper_title }}</h4>
+            <p>{{ paper.journal }}</p>
+            <p>{{ paper.publication_date }}</p>
+            <p>{{ paper.abstract }}</p>
+        </li>
+        {% endfor %}
+    </ol>
+
+    <h3>External Activities</h3>
+    <ol>
+        {% for activity in activities %}
+        <li>
+            <h4>{{ activity.activity_name }}</h4>
+            <p>{{ activity.description }}</p>
+            <p>
+                <span class="company">{{ activity.start_date }} - {{ activity.end_date }}</span>
+            </p>
+        </li>
+        {% endfor %}
+    </ol>
+</main>
