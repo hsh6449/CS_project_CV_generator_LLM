@@ -1,2 +1,5 @@
-project/model/.huggingface
-project/model/credentials.json
+# Ignore credentials file
+/project/credentials.json
+
+# Ignore entire model directory
+/project/model/credentials.json
